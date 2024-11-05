@@ -1,105 +1,124 @@
 # Blockchain-Go
 
-🚀 **Blockchain-Go** é um projeto simples de blockchain escrito em Go, usando o banco de dados embutido **BadgerDB** para persistência. Este projeto implementa funcionalidades básicas de uma blockchain, como criação de blocos e transações entre contas. Abaixo estão as instruções para configuração, execução e uso de comandos essenciais.
+🚀 **Blockchain-Go** is a basic blockchain implementation written in Go, utilizing **BadgerDB** for data persistence. This project demonstrates essential blockchain functionality, including block creation, transaction handling, and wallet management, using a CLI interface.
 
-## 📋 Pré-requisitos
+## 📋 Prerequisites
 
-- **Go** versão 1.23.1 ou superior.
-- Configuração de ambiente Go adequada.
-- Recomendado: Experiência básica com blockchain e linha de comando.
+- **Go** version 1.23.1 or higher.
+- Basic understanding of blockchain concepts and experience with command-line interfaces is recommended.
 
-## 📁 Estrutura do Projeto
+## 📂 Project Structure
 
-O projeto tem a seguinte estrutura básica:
+The project includes:
 
-- `main.go`: Arquivo principal com a interface de linha de comando (CLI) para a blockchain.
-- `blockchain.go`: Define a estrutura da blockchain e os métodos para adicionar blocos.
-- `badger` (biblioteca): Usada para armazenamento persistente de dados.
+- `main.go`: Entry point for the CLI, where blockchain commands are run.
+- `blockchain/`: Implements the blockchain, transaction, and proof-of-work functionality.
+- `cli/cli.go`: Manages command-line commands and arguments.
+- `wallet/`: Includes wallet creation, management, and address generation.
+- `tmp/blocks/`: Directory for storing blockchain data.
 
-## 🚀 Começando
+## 🔧 Setup Instructions
 
-Clone este repositório e navegue até a pasta do projeto.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/danubiobwm/blockchain-go.git
+   cd blockchain-go
+   ```
+2. **Install Dependencies**:
+
+- BadgerDB is included in the module files; ensure you have internet access for Go to download dependencies.
+
+3. **Run the Project**:
+
+- Use the CLI to interact with the blockchain.
+
+## 🚀 Commands and Usage
+
+Here’s a guide to using the blockchain's main functions:
+
+#### 1. **Create a New Blockchain**
+
+Create a new blockchain and initialize it with an address to receive mining rewards.
 
 ```bash
-git clone https://github.com/danubiobwm/blockchain-go
-cd blockchain-go
+go run main.go createBlockchain -address "your_address"
 ```
-## ⚙️ Configuração e Execução
-1. Criar uma Blockchain
-Para iniciar uma nova blockchain e criar um bloco gênese (primeiro bloco), use o comando createblockchain. O parâmetro -address indica o endereço que receberá a recompensa inicial:
-```bash
-go run main.go createblockchain -address "jonh"
-```
-🎉 Isso cria uma nova blockchain com o endereço "jonh" como minerador inicial, recebendo a recompensa do bloco gênese.
 
+#### 2. **Print the Blockchain**
 
-## 🔍 2. Consultar Saldo
-Para verificar o saldo de um endereço específico, utilize o comando getbalance:
+Prints all blocks in the current blockchain, showing hashes and transaction details.
 
 ```bash
-go run main.go getbalance -address "jonh"
+go run main.go printchain
 ```
-## 🔍 Exemplo de Saída:
+
+#### 3. **Check Balance**
+
+Check the balance of an address.
 
 ```bash
-badger 2024/11/03 INFO: All 1 tables opened in 2ms
-badger 2024/11/03 INFO: Replay took: 0s
-Balance of jonh: 100
+go run main.go getBalance -address "your_address"
 ```
 
-##  🤑 3. Enviar Moedas
-Para enviar moedas de um endereço a outro, use o comando send. Certifique-se de que o endereço de origem possui saldo suficiente para cobrir o valor da transação.
+#### 4. **Send Tokens**
+
+Send tokens from one address to another. Make sure there are enough funds in the sender's address.
+
+```bash
+go run main.go send -from "sender_address" -to "recipient_address" -amount amount
+```
+
+If successful, the transaction ID will be printed.
+
+#### 5. **Create a New Wallet**
+
+Generate a new wallet with a unique address.
+
+```bash
+go run main.go createWallet
+```
+
+#### 6. **List All Addresses**
+
+List all addresses created in the wallet file.
+
+```bash
+go run main.go listAddresses
+```
+
+## 🌟 Example Workflow
+
+**_Create a Blockchain:_**
+
+```bash
+go run main.go createBlockchain -address "jonh"
+```
+
+**_Check Balance:_**
+
+```bash
+go run main.go getBalance -address "jonh"
+
+```
+
+**_Send Tokens:_**
 
 ```bash
 go run main.go send -from "jonh" -to "danubio" -amount 10
 ```
-## 📦 Exemplo de Saída:
+
+**_Confirm Balance Update:_**
+
 ```bash
-badger 2024/11/03 INFO: All 1 tables opened in 2ms
-000008947f0942d7d69a034b8e781a5deee6bd5977737809833d37a007873b72
-Sucess!
-Balance of jonh: 10
+go run main.go getBalance -address "danubio"
 ```
 
-## 🎮 Exemplos de Comandos
-Aqui estão alguns exemplos de comandos que você pode utilizar para interagir com a blockchain:
+Each command above will interact with the blockchain, update balances, and save transactions in BadgerDB.
 
-### Criar Blockchain:
-```bash
-go run main.go createblockchain -address "alice"
-```
-### Consultar Saldo:
-```bash
-go run main.go getbalance -address "alice"
-```
-### Enviar Moedas:
-```bash
-go run main.go send -from "alice" -to "bob" -amount 20
-```
+## 📄 Logging
 
-##  🛠 Solução de Problemas
-#### Erro: not enough funds: Esse erro indica que o endereço de origem não possui saldo suficiente para a transação solicitada.
-#### Exibição de Usage ao executar um comando: Certifique-se de que os comandos e parâmetros foram inseridos corretamente, conforme a documentação.
+BadgerDB logs can help trace operations, especially during database access or debugging. Logs include information like compaction priorities, replay actions, and other database-specific messages.
 
-## 📜 Mensagens de Log do BadgerDB
+### 🧑‍💻 Developed by Danubio
 
-Durante a execução, o BadgerDB exibe mensagens de log informando o status do banco de dados. Essas mensagens são normais e indicam atividades como abertura de tabelas, execução de compacções, e replay de arquivos.
-
-##
-✨ Pronto! Agora você está apto a criar sua própria blockchain, consultar saldos e realizar transações básicas entre endereços! Divirta-se explorando as possibilidades e experimentando com os diferentes comandos. Se precisar de ajuda ou encontrar problemas, sinta-se à vontade para revisar o código ou consultar esta documentação.
-##
-
-## 💡 Dicas:
-
-Este projeto é uma implementação básica de blockchain e é ideal para estudos.
-Para produção, considere adicionar validação de transação, sistema de Proof-of-Work, e mais segurança no armazenamento e manipulação dos dados.
-
-## Desenvolvido com ❤️ e Go! 🐹
-Criado por **Danubio**.
-
-
-
-
-Esse `README.md` inclui detalhes para instalação, execução, comandos e exemplos de saída do console, além de dicas úteis para o uso do projeto. Sinta-se à vontade para modificar ou expandir conforme o projeto evoluir!
-
-
+#### Developed with ❤️ and Go! 🐹
